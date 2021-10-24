@@ -1,0 +1,10 @@
+CREATE TABLE Item (
+    id INTEGER PRIMARY KEY,
+    feedId INTEGER NOT NULL REFERENCES Feed(id) ON DELETE CASCADE,
+    url TEXT NOT NULL UNIQUE,
+    title TEXT NOT NULL,
+    timestamp TEXT NOT NULL
+);
+
+insert:
+INSERT INTO Item(feedId, url, title, timestamp) VALUES (?, ?, ?, ?);

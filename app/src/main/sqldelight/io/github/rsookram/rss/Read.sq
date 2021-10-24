@@ -1,0 +1,13 @@
+CREATE TABLE Read (
+    id INTEGER PRIMARY KEY,
+    itemId INTEGER NOT NULL REFERENCES Item(id) ON DELETE CASCADE
+);
+
+CREATE INDEX readItemId ON Read(itemId);
+
+markRead:
+INSERT INTO Read(itemId) VALUES (?);
+
+markUnread:
+DELETE FROM Read
+WHERE itemId = ?;
