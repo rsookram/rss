@@ -6,6 +6,9 @@ CREATE TABLE Feed (
 
 CREATE INDEX feedUrl ON Feed(url);
 
+feed:
+SELECT id, url FROM Feed;
+
 insert:
 INSERT INTO Feed(url, name) VALUES (?, ?);
 

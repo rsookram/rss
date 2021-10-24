@@ -90,9 +90,11 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.hiltNavigationCompose)
+    implementation(libs.androidx.hiltWork)
     implementation(libs.androidx.viewmodelCompose)
     implementation(libs.androidx.navigation)
     implementation(libs.androidx.paging)
+    implementation(libs.androidx.workmanager)
 
     implementation(libs.compose.ui)
     implementation(libs.compose.material)
@@ -101,6 +103,9 @@ dependencies {
     implementation(libs.accompanist.insets)
     implementation(libs.accompanist.insetsUi)
     implementation(libs.accompanist.systemuicontroller)
+
+    implementation(libs.retrofit)
+    implementation(libs.retrofitRss)
 
     implementation(libs.sqldelight.android)
     implementation(libs.sqldelight.coroutines)

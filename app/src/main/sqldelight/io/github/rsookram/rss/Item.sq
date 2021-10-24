@@ -7,4 +7,4 @@ CREATE TABLE Item (
 );
 
 insert:
-INSERT INTO Item(feedId, url, title, timestamp) VALUES (?, ?, ?, ?);
+INSERT OR IGNORE INTO Item(feedId, url, title, timestamp) VALUES (?, ?, ?, ?);
