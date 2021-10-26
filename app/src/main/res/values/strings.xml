@@ -3,5 +3,9 @@
     <string name="app_name">rss</string>
 
     <string name="toolbar_up_description">Navigate up</string>
+    <string name="view_more_options">More options</string>
+
+    <string name="manage_feeds">Manage feeds</string>
+    <string name="force_refresh">Force refresh</string>
 
 </resources>

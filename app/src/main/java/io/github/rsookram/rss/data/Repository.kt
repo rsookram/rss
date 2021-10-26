@@ -1,7 +1,10 @@
 package io.github.rsookram.rss.data
 
+import androidx.paging.PagingSource
+import com.squareup.sqldelight.android.paging3.QueryPagingSource
 import io.github.rsookram.rss.Database
 import io.github.rsookram.rss.Feed
+import io.github.rsookram.rss.Item
 import io.github.rsookram.rss.ItemQueries
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -13,6 +16,17 @@ class Repository @Inject constructor(
     private val service: RssService,
     private val ioDispatcher: CoroutineDispatcher,
 ) {
+
+    fun items(): PagingSource<Long, Item> {
+        val itemQueries = database.itemQueries
+
+        return QueryPagingSource(
+            countQuery = itemQueries.countItems(),
+            transacter = itemQueries,
+            dispatcher = ioDispatcher,
+            queryProvider = { limit, offset -> itemQueries.item(limit, offset) },
+        )
+    }
 
     suspend fun sync() {
         val feeds = withContext(ioDispatcher) {

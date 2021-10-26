@@ -22,7 +22,8 @@ SELECT
 FROM Item
     JOIN Feed ON Item.feedId = Feed.id
     LEFT JOIN Read ON Item.id = Read.itemId
-ORDER BY Item.timestamp DESC;
+ORDER BY Item.timestamp DESC
+LIMIT :limit OFFSET :offset;
 
 insert:
 INSERT OR IGNORE INTO Item(feedId, url, title, timestamp) VALUES (?, ?, ?, ?);
