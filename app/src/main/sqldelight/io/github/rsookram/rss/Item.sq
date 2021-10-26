@@ -6,5 +6,23 @@ CREATE TABLE Item (
     timestamp TEXT NOT NULL
 );
 
+CREATE INDEX itemFeedId ON Item(feedId);
+CREATE INDEX itemTimestamp ON Item(timestamp);
+
+countItems:
+SELECT COUNT(*) FROM Item;
+
+item:
+SELECT
+    Item.id,
+    Item.url,
+    title,
+    Feed.name AS feedName,
+    Read.itemId IS NOT NULL AS isRead
+FROM Item
+    JOIN Feed ON Item.feedId = Feed.id
+    LEFT JOIN Read ON Item.id = Read.itemId
+ORDER BY Item.timestamp DESC;
+
 insert:
 INSERT OR IGNORE INTO Item(feedId, url, title, timestamp) VALUES (?, ?, ?, ?);
