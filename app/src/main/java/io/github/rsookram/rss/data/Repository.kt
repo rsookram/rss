@@ -2,11 +2,14 @@ package io.github.rsookram.rss.data
 
 import androidx.paging.PagingSource
 import com.squareup.sqldelight.android.paging3.QueryPagingSource
+import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToList
 import io.github.rsookram.rss.Database
 import io.github.rsookram.rss.Feed
 import io.github.rsookram.rss.Item
 import io.github.rsookram.rss.ItemQueries
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import me.toptas.rssconverter.RssItem
 import javax.inject.Inject
@@ -27,6 +30,9 @@ class Repository @Inject constructor(
             queryProvider = { limit, offset -> itemQueries.item(limit, offset) },
         )
     }
+
+    fun feeds(): Flow<List<Feed>> =
+        database.feedQueries.feed().asFlow().mapToList()
 
     suspend fun sync() {
         val feeds = withContext(ioDispatcher) {

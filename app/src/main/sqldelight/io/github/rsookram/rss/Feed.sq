@@ -7,7 +7,7 @@ CREATE TABLE Feed (
 CREATE INDEX feedUrl ON Feed(url);
 
 feed:
-SELECT id, url FROM Feed;
+SELECT id, url FROM Feed ORDER BY url;
 
 insert:
 INSERT INTO Feed(url, name) VALUES (?, ?);
