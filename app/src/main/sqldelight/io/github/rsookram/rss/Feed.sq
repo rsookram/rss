@@ -6,8 +6,11 @@ CREATE TABLE Feed (
 
 CREATE INDEX feedUrl ON Feed(url);
 
+getLastCreatedId:
+SELECT last_insert_rowid();
+
 feed:
-SELECT id, url FROM Feed ORDER BY url;
+SELECT id, url, name FROM Feed ORDER BY url;
 
 insert:
 INSERT INTO Feed(url, name) VALUES (?, ?);

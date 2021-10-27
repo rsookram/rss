@@ -9,4 +9,7 @@
     <string name="force_refresh">Force refresh</string>
 
     <string name="feeds">Feeds</string>
+    <string name="add_feed">Add feed</string>
+    <string name="add_feed_button">Add</string>
+    <string name="feed_url">URL</string>
 </resources>

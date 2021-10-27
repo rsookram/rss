@@ -34,24 +34,33 @@ class Repository @Inject constructor(
     fun feeds(): Flow<List<Feed>> =
         database.feedQueries.feed().asFlow().mapToList()
 
+    suspend fun addFeed(url: String) = withContext(ioDispatcher) {
+        database.feedQueries.insert(url, name = "")
+
+        val id = database.feedQueries.getLastCreatedId().executeAsOne()
+        refreshFeed(id, url)
+    }
+
     suspend fun sync() {
         val feeds = withContext(ioDispatcher) {
             database.feedQueries.feed().executeAsList()
         }
 
         // TODO: Parallelize
-        feeds.forEach { feed ->
-            refreshFeed(feed)
+        feeds.forEach { (id, url) ->
+            refreshFeed(id, url)
         }
     }
 
-    private suspend fun refreshFeed(feed: Feed) {
-        val items = service.feed(feed.url).items ?: return
+    private suspend fun refreshFeed(id: Long, url: String) {
+        // TODO: Fork RSS converter and add support feed titles. Need to potentially update feed
+        //  name here.
+        val items = service.feed(url).items ?: return
 
-        database.itemQueries.insertAll(feed, items)
+        database.itemQueries.insertAll(id, items)
     }
 
-    private suspend fun ItemQueries.insertAll(feed: Feed, items: List<RssItem>) {
+    private suspend fun ItemQueries.insertAll(id: Long, items: List<RssItem>) {
         withContext(ioDispatcher) {
             transaction {
                 items.forEach { item ->
@@ -61,7 +70,7 @@ class Repository @Inject constructor(
 
                     // TODO: Don't add items that are too old (> 90 days)
                     if (url != null && title != null && timestamp != null) {
-                        insert(feed.id, url, title, timestamp)
+                        insert(id, url, title, timestamp)
                     }
                 }
             }
