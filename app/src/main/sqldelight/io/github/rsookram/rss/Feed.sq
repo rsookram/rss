@@ -15,6 +15,11 @@ SELECT id, url, name FROM Feed ORDER BY url;
 insert:
 INSERT INTO Feed(url, name) VALUES (?, ?);
 
+updateName:
+UPDATE Feed
+SET name = :name
+WHERE id = :id;
+
 delete:
 DELETE FROM Feed
 WHERE id = ?;

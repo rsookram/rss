@@ -53,19 +53,19 @@ class Repository @Inject constructor(
     }
 
     private suspend fun refreshFeed(id: Long, url: String) {
-        // TODO: Update feed name here
-        val items = service.feed(url).items
+        val (name, items) = service.feed(url)
 
-        database.itemQueries.insertAll(id, items)
+        withContext(ioDispatcher) {
+            database.feedQueries.updateName(name, id)
+            database.itemQueries.insertAll(id, items)
+        }
     }
 
-    private suspend fun ItemQueries.insertAll(id: Long, items: List<RssItem>) {
-        withContext(ioDispatcher) {
-            transaction {
-                items.forEach { (url, title, timestamp) ->
-                    // TODO: Don't add items that are too old (> 90 days)
-                    insert(id, url, title, timestamp)
-                }
+    private fun ItemQueries.insertAll(id: Long, items: List<RssItem>) {
+        transaction {
+            items.forEach { (url, title, timestamp) ->
+                // TODO: Don't add items that are too old (> 90 days)
+                insert(id, url, title, timestamp)
             }
         }
     }
