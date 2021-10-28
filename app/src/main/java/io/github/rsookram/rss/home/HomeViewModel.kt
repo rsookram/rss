@@ -1,6 +1,9 @@
 package io.github.rsookram.rss.home
 
+import android.content.Intent
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -30,6 +33,8 @@ class HomeViewModel @Inject constructor(private val repository: Repository) : Vi
 
 @Composable
 fun HomeScreen(navController: NavController, vm: HomeViewModel = hiltViewModel()) {
+    val context = LocalContext.current
+
     val items = vm.items.collectAsLazyPagingItems()
 
     Home(
@@ -38,6 +43,8 @@ fun HomeScreen(navController: NavController, vm: HomeViewModel = hiltViewModel()
         onRefresh = vm::onRefresh,
         onManageFeedsClick = { navController.navigate("feeds") },
         items = items,
-        onItemClick = { item -> TODO("VIEW Intent") }
+        onItemClick = { item ->
+            context.startActivity(Intent(Intent.ACTION_VIEW, item.url.toUri()))
+        }
     )
 }
