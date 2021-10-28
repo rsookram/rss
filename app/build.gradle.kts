@@ -95,6 +95,7 @@ dependencies {
     implementation(libs.androidx.navigation)
     implementation(libs.androidx.paging)
     implementation(libs.androidx.workmanager)
+    kapt(libs.androidx.hiltCompiler)
 
     implementation(libs.compose.ui)
     implementation(libs.compose.material)

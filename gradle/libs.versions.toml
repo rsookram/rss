@@ -1,5 +1,6 @@
 [versions]
 accompanist = "0.20.0"
+androidxHilt = "1.0.0"
 compose = "1.0.4"
 coroutines = "1.5.2"
 hilt = "2.39.1"
@@ -14,8 +15,9 @@ agp = { module = "com.android.tools.build:gradle", version = "7.0.2" }
 
 androidx-core = { module = "androidx.core:core-ktx", version = "1.7.0" }
 androidx-activity = { module = "androidx.activity:activity-compose", version = "1.4.0" }
+androidx-hiltCompiler = { module = "androidx.hilt:hilt-compiler", version.ref = "androidxHilt" }
 androidx-hiltNavigationCompose = { module = "androidx.hilt:hilt-navigation-compose", version = "1.0.0-alpha03" }
-androidx-hiltWork = { module = "androidx.hilt:hilt-work", version = "1.0.0" }
+androidx-hiltWork = { module = "androidx.hilt:hilt-work", version.ref = "androidxHilt" }
 androidx-viewmodelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.4.0" }
 androidx-navigation = { module = "androidx.navigation:navigation-compose", version = "2.4.0-beta01" }
 androidx-paging = { module = "androidx.paging:paging-compose", version = "1.0.0-alpha14" }
