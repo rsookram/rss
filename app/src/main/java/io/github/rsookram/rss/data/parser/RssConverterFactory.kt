@@ -29,39 +29,72 @@ private class RssResponseBodyConverter : Converter<ResponseBody, RssFeed> {
 
         val document = documentBuilder.parse(value.byteStream())
 
-        // TODO: Handle RSS. This only handles atom now
         val name = document.getElementsByTagName("title").item(0)?.textContent ?: return null
-        val entryNodes = document.getElementsByTagName("entry") ?: return null
 
-        return RssFeed(
-            name,
-            entryNodes.toItems(),
-        )
+        val isAtom = document.firstChild.nodeName == "feed"
+        val items = if (isAtom) {
+            parseAtom(document.getElementsByTagName("entry"))
+        } else {
+            parseRss(document.getElementsByTagName("item"))
+        }
+
+        return RssFeed(name, items)
     }
 }
 
-private fun NodeList.toItems(): List<RssItem> =
-    (0 until length)
-        .map(this::item)
-        .map(Node::toItem)
+// TODO: Deduplicate code
+private fun parseAtom(nodes: NodeList): List<RssItem> =
+    (0 until nodes.length)
+        .map(nodes::item)
+        .map(::parseAtomItem)
 
-private fun Node.toItem(): RssItem {
+private fun parseAtomItem(node: Node): RssItem {
     var url = ""
     var title = ""
     var timestamp = ""
 
-    for (i in 0 until childNodes.length) {
-        val node = childNodes.item(i)
+    for (i in 0 until node.childNodes.length) {
+        val child = node.childNodes.item(i)
 
-        when (node.nodeName) {
+        when (child.nodeName) {
             "link" -> {
-                url = node.attributes.getNamedItem("href").textContent
+                url = child.attributes.getNamedItem("href").textContent
             }
             "title" -> {
-                title = node.textContent
+                title = child.textContent
             }
             "updated" -> {
-                timestamp = node.textContent
+                timestamp = child.textContent
+            }
+        }
+    }
+
+    // TODO: Parse timestamp
+    return RssItem(url, title, timestamp)
+}
+
+private fun parseRss(nodes: NodeList): List<RssItem> =
+    (0 until nodes.length)
+        .map(nodes::item)
+        .map(::parseRssItem)
+
+private fun parseRssItem(node: Node): RssItem {
+    var url = ""
+    var title = ""
+    var timestamp = ""
+
+    for (i in 0 until node.childNodes.length) {
+        val child = node.childNodes.item(i)
+
+        when (child.nodeName) {
+            "link" -> {
+                url = child.textContent
+            }
+            "title" -> {
+                title = child.textContent
+            }
+            "pubDate" -> {
+                timestamp = child.textContent
             }
         }
     }
