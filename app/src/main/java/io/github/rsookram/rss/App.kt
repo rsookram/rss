@@ -15,8 +15,8 @@ import dagger.hilt.components.SingletonComponent
 import io.github.rsookram.rss.data.Repository
 import io.github.rsookram.rss.data.RssService
 import io.github.rsookram.rss.data.SyncWorker
+import io.github.rsookram.rss.data.parser.RssConverterFactory
 import kotlinx.coroutines.Dispatchers
-import me.toptas.rssconverter.RssConverterFactory
 import retrofit2.Retrofit
 import retrofit2.create
 import java.time.Duration
@@ -78,7 +78,7 @@ class AppModule {
     fun provideRssService(): RssService =
         Retrofit.Builder()
             .baseUrl("https://www.example.test/")
-            .addConverterFactory(RssConverterFactory.create())
+            .addConverterFactory(RssConverterFactory())
             .build()
             .create()
 }

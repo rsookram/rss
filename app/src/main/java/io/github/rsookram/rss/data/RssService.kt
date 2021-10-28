@@ -1,6 +1,6 @@
 package io.github.rsookram.rss.data
 
-import me.toptas.rssconverter.RssFeed
+import io.github.rsookram.rss.data.parser.RssFeed
 import retrofit2.http.GET
 import retrofit2.http.Url
 

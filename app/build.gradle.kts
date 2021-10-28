@@ -105,7 +105,6 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
 
     implementation(libs.retrofit)
-    implementation(libs.retrofitRss)
 
     implementation(libs.sqldelight.android)
     implementation(libs.sqldelight.coroutines)

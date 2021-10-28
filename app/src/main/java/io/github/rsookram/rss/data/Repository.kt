@@ -8,10 +8,10 @@ import io.github.rsookram.rss.Database
 import io.github.rsookram.rss.Feed
 import io.github.rsookram.rss.Item
 import io.github.rsookram.rss.ItemQueries
+import io.github.rsookram.rss.data.parser.RssItem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
-import me.toptas.rssconverter.RssItem
 import javax.inject.Inject
 
 class Repository @Inject constructor(
@@ -53,9 +53,8 @@ class Repository @Inject constructor(
     }
 
     private suspend fun refreshFeed(id: Long, url: String) {
-        // TODO: Fork RSS converter and add support feed titles. Need to potentially update feed
-        //  name here.
-        val items = service.feed(url).items ?: return
+        // TODO: Update feed name here
+        val items = service.feed(url).items
 
         database.itemQueries.insertAll(id, items)
     }
@@ -63,15 +62,9 @@ class Repository @Inject constructor(
     private suspend fun ItemQueries.insertAll(id: Long, items: List<RssItem>) {
         withContext(ioDispatcher) {
             transaction {
-                items.forEach { item ->
-                    val url = item.link
-                    val title = item.title
-                    val timestamp = item.publishDate
-
+                items.forEach { (url, title, timestamp) ->
                     // TODO: Don't add items that are too old (> 90 days)
-                    if (url != null && title != null && timestamp != null) {
-                        insert(id, url, title, timestamp)
-                    }
+                    insert(id, url, title, timestamp)
                 }
             }
         }
