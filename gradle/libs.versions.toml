@@ -3,7 +3,7 @@ accompanist = "0.20.0"
 androidxHilt = "1.0.0"
 compose = "1.0.4"
 coroutines = "1.5.2"
-hilt = "2.39.1"
+hilt = "2.40"
 sqldelight = "1.5.2"
 
 [libraries]
