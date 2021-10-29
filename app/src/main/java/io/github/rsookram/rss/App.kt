@@ -44,6 +44,17 @@ class App : Application(), Configuration.Provider {
                     )
                     .build()
             )
+
+        WorkManager.getInstance(this)
+            .enqueueUniquePeriodicWork(
+                "prune",
+                ExistingPeriodicWorkPolicy.KEEP,
+                PeriodicWorkRequestBuilder<SyncWorker>(Duration.ofDays(7))
+                    .setConstraints(
+                        Constraints.Builder().setRequiresCharging(true).build()
+                    )
+                    .build()
+            )
     }
 
     override fun getWorkManagerConfiguration() =

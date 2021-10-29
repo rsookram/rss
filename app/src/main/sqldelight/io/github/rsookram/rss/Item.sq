@@ -24,3 +24,7 @@ LIMIT :limit OFFSET :offset;
 
 insert:
 INSERT OR IGNORE INTO Item(feedId, url, title, timestamp) VALUES (?, ?, ?, ?);
+
+prune:
+DELETE FROM Item
+WHERE datetime(timestamp) < datetime('now', '-90 days');

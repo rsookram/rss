@@ -75,4 +75,10 @@ class Repository @Inject constructor(
             }
         }
     }
+
+    suspend fun prune() {
+        withContext(ioDispatcher) {
+            database.itemQueries.prune()
+        }
+    }
 }
