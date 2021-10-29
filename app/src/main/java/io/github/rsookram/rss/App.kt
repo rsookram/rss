@@ -34,7 +34,9 @@ class App : Application(), Configuration.Provider {
         super.onCreate()
 
         WorkManager.getInstance(this)
-            .enqueue(
+            .enqueueUniquePeriodicWork(
+                "sync",
+                ExistingPeriodicWorkPolicy.KEEP,
                 PeriodicWorkRequestBuilder<SyncWorker>(Duration.ofHours(12))
                     .setConstraints(
                         Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
