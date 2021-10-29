@@ -12,11 +12,14 @@ import io.github.rsookram.rss.data.parser.RssItem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import java.time.Clock
+import java.time.Duration
 import javax.inject.Inject
 
 class Repository @Inject constructor(
     private val database: Database,
     private val service: RssService,
+    private val clock: Clock,
     private val ioDispatcher: CoroutineDispatcher,
 ) {
 
@@ -55,16 +58,19 @@ class Repository @Inject constructor(
     private suspend fun refreshFeed(id: Long, url: String) {
         val (name, items) = service.feed(url)
 
+        // Don't add items that are too old (> 90 days)
+        val threshold = clock.instant().minus(Duration.ofDays(90))
+        val recentItems = items.filter { it.timestamp > threshold }
+
         withContext(ioDispatcher) {
             database.feedQueries.updateName(name, id)
-            database.itemQueries.insertAll(id, items)
+            database.itemQueries.insertAll(id, recentItems)
         }
     }
 
     private fun ItemQueries.insertAll(id: Long, items: List<RssItem>) {
         transaction {
             items.forEach { (url, title, timestamp) ->
-                // TODO: Don't add items that are too old (> 90 days)
                 insert(id, url, title, timestamp.toString())
             }
         }

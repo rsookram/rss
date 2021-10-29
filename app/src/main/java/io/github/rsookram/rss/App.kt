@@ -19,6 +19,7 @@ import io.github.rsookram.rss.data.parser.RssConverterFactory
 import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
 import retrofit2.create
+import java.time.Clock
 import java.time.Duration
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -71,6 +72,7 @@ class AppModule {
                 )
             ),
             service,
+            Clock.systemUTC(),
             Dispatchers.IO,
         )
     }
