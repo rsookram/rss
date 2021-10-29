@@ -17,11 +17,8 @@ SELECT
     Item.id,
     Item.url,
     title,
-    Feed.name AS feedName,
-    Read.itemId IS NOT NULL AS isRead
-FROM Item
-    JOIN Feed ON Item.feedId = Feed.id
-    LEFT JOIN Read ON Item.id = Read.itemId
+    Feed.name AS feedName
+FROM Item JOIN Feed ON Item.feedId = Feed.id
 ORDER BY Item.timestamp DESC
 LIMIT :limit OFFSET :offset;
 
