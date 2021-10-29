@@ -65,7 +65,7 @@ class Repository @Inject constructor(
         transaction {
             items.forEach { (url, title, timestamp) ->
                 // TODO: Don't add items that are too old (> 90 days)
-                insert(id, url, title, timestamp)
+                insert(id, url, title, timestamp.toString())
             }
         }
     }

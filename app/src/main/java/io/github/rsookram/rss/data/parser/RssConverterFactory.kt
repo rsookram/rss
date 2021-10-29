@@ -6,6 +6,8 @@ import org.w3c.dom.NodeList
 import retrofit2.Converter
 import retrofit2.Retrofit
 import java.lang.reflect.Type
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 import javax.xml.parsers.DocumentBuilderFactory
 
 class RssConverterFactory : Converter.Factory() {
@@ -69,8 +71,8 @@ private fun parseAtomItem(node: Node): RssItem {
         }
     }
 
-    // TODO: Parse timestamp
-    return RssItem(url, title, timestamp)
+    val instant = DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(timestamp, Instant::from)
+    return RssItem(url, title, instant)
 }
 
 private fun parseRss(nodes: NodeList): List<RssItem> =
@@ -99,10 +101,10 @@ private fun parseRssItem(node: Node): RssItem {
         }
     }
 
-    // TODO: Parse timestamp
-    return RssItem(url, title, timestamp)
+    val instant = DateTimeFormatter.RFC_1123_DATE_TIME.parse(timestamp, Instant::from)
+    return RssItem(url, title, instant)
 }
 
 data class RssFeed(val name: String, val items: List<RssItem>)
 
-data class RssItem(val url: String, val title: String, val timestamp: String)
+data class RssItem(val url: String, val title: String, val timestamp: Instant)
