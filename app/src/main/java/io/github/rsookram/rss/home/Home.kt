@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -94,9 +95,9 @@ fun Home(
 
 @Composable
 private fun ItemRow(modifier: Modifier = Modifier, item: Item) {
-    // TODO: Different colour background depending on read status
     Column(
         modifier
+            .alpha(if (item.isRead) 0.6f else 1.0f)
             .heightIn(min = 48.dp)
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.Center,
