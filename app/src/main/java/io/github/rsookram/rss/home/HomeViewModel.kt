@@ -26,7 +26,11 @@ class HomeViewModel @Inject constructor(private val repository: Repository) : Vi
 
     fun onRefresh() {
         viewModelScope.launch {
-            repository.sync()
+            try {
+                repository.sync()
+            } catch (e: Exception) {
+                // TODO: Show error
+            }
         }
     }
 }
