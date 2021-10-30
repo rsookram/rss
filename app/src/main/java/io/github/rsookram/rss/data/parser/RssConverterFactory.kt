@@ -33,9 +33,9 @@ private class RssResponseBodyConverter : Converter<ResponseBody, RssFeed> {
 
         val name = document.getElementsByTagName("title").item(0)?.textContent ?: return null
 
-        val isAtom = document.firstChild.nodeName == "feed"
-        val items = if (isAtom) {
-            parseAtom(document.getElementsByTagName("entry"))
+        val entryNodes = document.getElementsByTagName("entry")
+        val items = if (entryNodes.length > 0) {
+            parseAtom(entryNodes)
         } else {
             parseRss(document.getElementsByTagName("item"))
         }
