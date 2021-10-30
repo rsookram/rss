@@ -25,3 +25,7 @@
     public java.lang.StackTraceElement getStackTraceElement() return null;
 }
 -checkdiscard class kotlin.coroutines.jvm.internal.DebugMetadata
+
+# Remove after updating Retrofit from 2.9.0
+# https://github.com/square/retrofit/pull/3563
+-keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
