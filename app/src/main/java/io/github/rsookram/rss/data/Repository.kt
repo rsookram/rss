@@ -9,9 +9,8 @@ import io.github.rsookram.rss.Feed
 import io.github.rsookram.rss.Item
 import io.github.rsookram.rss.ItemQueries
 import io.github.rsookram.rss.data.parser.RssItem
-import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
 import java.time.Clock
 import java.time.Duration
 import javax.inject.Inject
@@ -49,9 +48,12 @@ class Repository @Inject constructor(
             database.feedQueries.feed().executeAsList()
         }
 
-        // TODO: Parallelize
-        feeds.forEach { (id, url) ->
-            refreshFeed(id, url)
+        coroutineScope {
+            feeds
+                .map { (id, url) ->
+                    async { refreshFeed(id, url) }
+                }
+                .awaitAll()
         }
     }
 
