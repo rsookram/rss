@@ -27,6 +27,7 @@ class RssConverterFactory : Converter.Factory() {
 private class RssResponseBodyConverter : Converter<ResponseBody, RssFeed> {
 
     override fun convert(value: ResponseBody): RssFeed? {
+        // TODO: Consider switching to a SAX parser
         val documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 
         val document = documentBuilder.parse(value.byteStream())
@@ -35,52 +36,22 @@ private class RssResponseBodyConverter : Converter<ResponseBody, RssFeed> {
 
         val entryNodes = document.getElementsByTagName("entry")
         val items = if (entryNodes.length > 0) {
-            parseAtom(entryNodes)
+            parseItems(entryNodes, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
         } else {
-            parseRss(document.getElementsByTagName("item"))
+            val itemNodes = document.getElementsByTagName("item")
+            parseItems(itemNodes, DateTimeFormatter.RFC_1123_DATE_TIME)
         }
 
         return RssFeed(name, items)
     }
 }
 
-// TODO: Deduplicate code
-private fun parseAtom(nodes: NodeList): List<RssItem> =
+private fun parseItems(nodes: NodeList, dateTimeFormatter: DateTimeFormatter): List<RssItem> =
     (0 until nodes.length)
         .map(nodes::item)
-        .map(::parseAtomItem)
+        .map { node -> parseItem(node, dateTimeFormatter) }
 
-private fun parseAtomItem(node: Node): RssItem {
-    var url = ""
-    var title = ""
-    var timestamp = ""
-
-    for (i in 0 until node.childNodes.length) {
-        val child = node.childNodes.item(i)
-
-        when (child.nodeName) {
-            "link" -> {
-                url = child.attributes.getNamedItem("href").textContent
-            }
-            "title" -> {
-                title = child.textContent
-            }
-            "updated" -> {
-                timestamp = child.textContent
-            }
-        }
-    }
-
-    val instant = DateTimeFormatter.ISO_OFFSET_DATE_TIME.parse(timestamp, Instant::from)
-    return RssItem(url, title, instant)
-}
-
-private fun parseRss(nodes: NodeList): List<RssItem> =
-    (0 until nodes.length)
-        .map(nodes::item)
-        .map(::parseRssItem)
-
-private fun parseRssItem(node: Node): RssItem {
+private fun parseItem(node: Node, dateTimeFormatter: DateTimeFormatter): RssItem {
     var url = ""
     var title = ""
     var timestamp = ""
@@ -95,13 +66,13 @@ private fun parseRssItem(node: Node): RssItem {
             "title" -> {
                 title = child.textContent
             }
-            "pubDate" -> {
+            "pubDate", "updated" -> {
                 timestamp = child.textContent
             }
         }
     }
 
-    val instant = DateTimeFormatter.RFC_1123_DATE_TIME.parse(timestamp, Instant::from)
+    val instant = dateTimeFormatter.parse(timestamp, Instant::from)
     return RssItem(url, title, instant)
 }
 
