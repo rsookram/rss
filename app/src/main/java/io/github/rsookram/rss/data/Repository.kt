@@ -36,7 +36,7 @@ class Repository @Inject constructor(
     fun feeds(): Flow<List<Feed>> =
         database.feedQueries.feed().asFlow().mapToList()
 
-    suspend fun addFeed(url: String) = withContext(ioDispatcher) {
+    suspend fun addFeed(url: String): Boolean = withContext(ioDispatcher) {
         database.feedQueries.insert(url, name = "")
 
         val id = database.feedQueries.getLastCreatedId().executeAsOne()
@@ -47,24 +47,29 @@ class Repository @Inject constructor(
         database.feedQueries.delete(id)
     }
 
-    suspend fun sync() {
+    suspend fun sync(): Boolean {
         val feeds = withContext(ioDispatcher) {
             database.feedQueries.feed().executeAsList()
         }
 
-        coroutineScope {
+        return coroutineScope {
             feeds
                 .map { (id, url) ->
                     async { refreshFeed(id, url) }
                 }
                 .awaitAll()
+                .all { success -> success }
         }
     }
 
-    private suspend fun refreshFeed(id: Long, url: String) {
-        val (name, items) = service.feed(url)
+    private suspend fun refreshFeed(id: Long, url: String): Boolean {
+        val (name, items) = try {
+            service.feed(url)
+        } catch (e: Exception) {
+            return false
+        }
 
-        // Don't add items that are too old (> 90 days)
+        // Don't add items that are too old
         val threshold = clock.instant().minus(Duration.ofDays(90))
         val recentItems = items.filter { it.timestamp > threshold }
 
@@ -72,6 +77,8 @@ class Repository @Inject constructor(
             database.feedQueries.updateName(name, id)
             database.itemQueries.insertAll(id, recentItems)
         }
+
+        return true
     }
 
     private fun ItemQueries.insertAll(id: Long, items: List<RssItem>) {
