@@ -15,4 +15,15 @@ buildscript {
     }
 }
 
+allprojects {
+    tasks.withType<KotlinCompile>().configureEach {
+        kotlinOptions {
+            freeCompilerArgs +=
+                listOf(
+                    "-Xopt-in=androidx.compose.foundation.ExperimentalFoundationApi", // Modifier.combinedClickable
+                )
+        }
+    }
+}
+
 tasks.register("clean", Delete::class) { delete(rootProject.buildDir) }

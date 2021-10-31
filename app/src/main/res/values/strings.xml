@@ -11,5 +11,7 @@
     <string name="feeds">Feeds</string>
     <string name="add_feed">Add feed</string>
     <string name="add_feed_button">Add</string>
+    <string name="delete_feed_button">Delete</string>
+    <string name="delete_feed_title">Delete %s?</string>
     <string name="feed_url">URL</string>
 </resources>

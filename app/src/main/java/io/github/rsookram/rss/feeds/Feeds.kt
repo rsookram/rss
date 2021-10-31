@@ -1,6 +1,7 @@
 package io.github.rsookram.rss.feeds
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,6 +29,7 @@ import io.github.rsookram.rss.R
 fun Feeds(
     feeds: List<Feed>,
     onAddFeed: (String) -> Unit,
+    onDeleteFeed: (Feed) -> Unit,
     onUpClick: () -> Unit,
 ) {
     Scaffold(
@@ -50,6 +52,7 @@ fun Feeds(
         }
     ) {
         var showAddFeedDialog by rememberSaveable { mutableStateOf(false) }
+        var showDeleteFeedDialog by rememberSaveable { mutableStateOf<Feed?>(null) }
 
         LazyColumn(
             contentPadding = rememberInsetsPaddingValues(
@@ -61,7 +64,14 @@ fun Feeds(
             }
 
             items(feeds) { feed ->
-                FeedRow(feed = feed)
+                FeedRow(
+                    Modifier.combinedClickable(
+                        onClick = {},
+                        onLongClick = { showDeleteFeedDialog = feed },
+                        onLongClickLabel = "",
+                    ),
+                    feed = feed,
+                )
             }
         }
 
@@ -72,6 +82,17 @@ fun Feeds(
                     showAddFeedDialog = false
                 },
                 onDismiss = { showAddFeedDialog = false }
+            )
+        }
+
+        showDeleteFeedDialog?.let { feed ->
+            DeleteFeedDialog(
+                feed,
+                onConfirm = {
+                    onDeleteFeed(feed)
+                    showDeleteFeedDialog = null
+                },
+                onDismiss = { showDeleteFeedDialog = null },
             )
         }
     }
@@ -123,7 +144,9 @@ private fun AddFeedDialog(onConfirm: (String) -> Unit, onDismiss: () -> Unit) {
                 Row(Modifier.fillMaxWidth()) {
                     Spacer(Modifier.weight(1f))
 
-                    TextButton(onClick = onDismiss) { Text(stringResource(android.R.string.cancel)) }
+                    TextButton(onClick = onDismiss) {
+                        Text(stringResource(android.R.string.cancel))
+                    }
 
                     TextButton(onClick = { onConfirm(feedUrl) }) {
                         Text(stringResource(R.string.add_feed_button))
@@ -132,6 +155,27 @@ private fun AddFeedDialog(onConfirm: (String) -> Unit, onDismiss: () -> Unit) {
             }
         }
     }
+}
+
+@Composable
+private fun DeleteFeedDialog(feed: Feed, onConfirm: () -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismiss,
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text(stringResource(R.string.delete_feed_button))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(android.R.string.cancel))
+            }
+        },
+        title = {
+            Text(stringResource(R.string.delete_feed_title, feed.name))
+        },
+        text = { Text(feed.url) },
+    )
 }
 
 @Composable

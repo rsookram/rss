@@ -43,6 +43,10 @@ class Repository @Inject constructor(
         refreshFeed(id, url)
     }
 
+    suspend fun removeFeed(id: Long) = withContext(ioDispatcher) {
+        database.feedQueries.delete(id)
+    }
+
     suspend fun sync() {
         val feeds = withContext(ioDispatcher) {
             database.feedQueries.feed().executeAsList()

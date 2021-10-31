@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.rsookram.rss.Feed
 import io.github.rsookram.rss.data.Repository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,9 +17,16 @@ class FeedsViewModel @Inject constructor(private val repository: Repository) : V
 
     val feeds = repository.feeds()
 
+    // TODO: Switch to app-level scope for these operations
     fun onAddFeed(url: String) {
         viewModelScope.launch {
             repository.addFeed(url)
+        }
+    }
+
+    fun onDeleteFeed(feed: Feed) {
+        viewModelScope.launch {
+            repository.removeFeed(feed.id)
         }
     }
 }
@@ -30,6 +38,7 @@ fun FeedsScreen(navController: NavController, vm: FeedsViewModel = hiltViewModel
     Feeds(
         feeds.value,
         vm::onAddFeed,
+        vm::onDeleteFeed,
         onUpClick = { navController.popBackStack() },
     )
 }
