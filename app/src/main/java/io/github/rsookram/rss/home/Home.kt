@@ -75,7 +75,6 @@ fun Home(
                             item,
                         )
                     } else {
-                        // TODO: Better loading state
                         Box(
                             Modifier
                                 .fillMaxWidth()
