@@ -4,28 +4,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.rsookram.rss.ApplicationScope
 import io.github.rsookram.rss.Feed
 import io.github.rsookram.rss.data.Repository
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class FeedsViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class FeedsViewModel @Inject constructor(
+    private val repository: Repository,
+    @ApplicationScope private val appScope: CoroutineScope,
+) : ViewModel() {
 
     val feeds = repository.feeds()
 
-    // TODO: Switch to app-level scope for these operations
     fun onAddFeed(url: String) {
-        viewModelScope.launch {
+        appScope.launch {
             repository.addFeed(url)
         }
     }
 
     fun onDeleteFeed(feed: Feed) {
-        viewModelScope.launch {
+        appScope.launch {
             repository.removeFeed(feed.id)
         }
     }

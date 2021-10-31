@@ -16,15 +16,22 @@ import io.github.rsookram.rss.data.Repository
 import io.github.rsookram.rss.data.RssService
 import io.github.rsookram.rss.data.SyncWorker
 import io.github.rsookram.rss.data.parser.RssConverterFactory
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import retrofit2.Retrofit
 import retrofit2.create
 import java.time.Clock
 import java.time.Duration
 import javax.inject.Inject
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 private const val DATABASE_NAME = "rss.db"
+
+@Retention(AnnotationRetention.RUNTIME)
+@Qualifier
+annotation class ApplicationScope
 
 @HiltAndroidApp
 class App : Application(), Configuration.Provider {
@@ -96,4 +103,9 @@ class AppModule {
             .addConverterFactory(RssConverterFactory())
             .build()
             .create()
+
+    @Singleton
+    @ApplicationScope
+    @Provides
+    fun providesCoroutineScope() = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 }
