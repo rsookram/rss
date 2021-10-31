@@ -38,6 +38,9 @@ android {
                 "kotlin/**",
                 "**/DebugProbesKt.bin",
                 "META-INF/*.version",
+                // Public suffixes aren't needed since cookies aren't read
+                // https://stackoverflow.com/questions/46168012/understand-okhttp-publicsuffixes-gz
+                "okhttp3/internal/publicsuffix/*",
             )
     }
 
