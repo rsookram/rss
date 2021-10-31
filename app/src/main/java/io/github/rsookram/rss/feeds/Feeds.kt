@@ -65,11 +65,13 @@ fun Feeds(
 
             items(feeds) { feed ->
                 FeedRow(
-                    Modifier.combinedClickable(
-                        onClick = {},
-                        onLongClick = { showDeleteFeedDialog = feed },
-                        onLongClickLabel = "",
-                    ),
+                    Modifier
+                        .combinedClickable(
+                            onClick = {},
+                            onLongClick = { showDeleteFeedDialog = feed },
+                            onLongClickLabel = "",
+                        )
+                        .fillMaxWidth(),
                     feed = feed,
                 )
             }
