@@ -8,6 +8,7 @@ import io.github.rsookram.rss.Database
 import io.github.rsookram.rss.Feed
 import io.github.rsookram.rss.Item
 import io.github.rsookram.rss.ItemQueries
+import io.github.rsookram.rss.data.parser.RssFeed
 import io.github.rsookram.rss.data.parser.RssItem
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
@@ -40,7 +41,14 @@ class Repository @Inject constructor(
         database.feedQueries.insert(url, name = "")
 
         val id = database.feedQueries.getLastCreatedId().executeAsOne()
-        refreshFeed(id, url)
+        val (name, items) = refreshFeed(url) ?: return@withContext false
+
+        database.feedQueries.updateName(name, id)
+        database.transaction {
+            database.itemQueries.insertAll(id, items)
+        }
+
+        true
     }
 
     suspend fun removeFeed(id: Long) = withContext(ioDispatcher) {
@@ -52,40 +60,46 @@ class Repository @Inject constructor(
             database.feedQueries.feed().executeAsList()
         }
 
-        return coroutineScope {
+        val rssFeeds = coroutineScope {
             feeds
                 .map { (id, url) ->
-                    async { refreshFeed(id, url) }
+                    async { id to refreshFeed(url) }
                 }
                 .awaitAll()
-                .all { success -> success }
+                .mapNotNull { (id, feed) -> if (feed != null) id to feed else null }
         }
+
+        if (rssFeeds.isEmpty()) return false
+
+        withContext(ioDispatcher) {
+            database.transaction {
+                rssFeeds.forEach { (id, feed) ->
+                    database.feedQueries.updateName(feed.name, id)
+                    database.itemQueries.insertAll(id, feed.items)
+                }
+            }
+        }
+
+        return true
     }
 
-    private suspend fun refreshFeed(id: Long, url: String): Boolean {
+    private suspend fun refreshFeed(url: String): RssFeed? {
         val (name, items) = try {
             service.feed(url)
         } catch (e: Exception) {
-            return false
+            return null
         }
 
         // Don't add items that are too old
         val threshold = clock.instant().minus(Duration.ofDays(90))
         val recentItems = items.filter { it.timestamp > threshold }
 
-        withContext(ioDispatcher) {
-            database.feedQueries.updateName(name, id)
-            database.itemQueries.insertAll(id, recentItems)
-        }
-
-        return true
+        return RssFeed(name, recentItems)
     }
 
     private fun ItemQueries.insertAll(id: Long, items: List<RssItem>) {
-        transaction {
-            items.forEach { (url, title, timestamp) ->
-                insert(id, url, title, timestamp.toString())
-            }
+        items.forEach { (url, title, timestamp) ->
+            insert(id, url, title, timestamp.toString())
         }
     }
 
