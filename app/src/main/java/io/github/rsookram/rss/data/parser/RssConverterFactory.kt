@@ -1,6 +1,7 @@
 package io.github.rsookram.rss.data.parser
 
 import okhttp3.ResponseBody
+import org.w3c.dom.Element
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
 import retrofit2.Converter
@@ -61,7 +62,9 @@ private fun parseItem(node: Node, dateTimeFormatter: DateTimeFormatter): RssItem
 
         when (child.nodeName) {
             "link" -> {
-                url = child.textContent
+                url = child.textContent.ifEmpty {
+                    (child as? Element)?.getAttribute("href").orEmpty()
+                }
             }
             "title" -> {
                 title = child.textContent
