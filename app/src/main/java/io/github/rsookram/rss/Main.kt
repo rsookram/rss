@@ -4,16 +4,16 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import io.github.rsookram.rss.feeds.FeedsScreen
-import io.github.rsookram.rss.home.HomeScreen
+import io.github.rsookram.rss.feeds.Feeds
+import io.github.rsookram.rss.home.Home
 
 @Composable
 fun Main() {
     val navController = rememberNavController()
 
     NavHost(navController, startDestination = "home") {
-        composable("home") { HomeScreen(navController) }
+        composable("home") { Home(navController) }
 
-        composable("feeds") { FeedsScreen(navController) }
+        composable("feeds") { Feeds(navController) }
     }
 }

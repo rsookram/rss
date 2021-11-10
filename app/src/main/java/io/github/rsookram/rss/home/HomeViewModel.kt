@@ -33,8 +33,11 @@ class HomeViewModel @Inject constructor(private val repository: Repository) : Vi
     }
 }
 
+/**
+ * The stateful version of [Home]
+ */
 @Composable
-fun HomeScreen(navController: NavController, vm: HomeViewModel = hiltViewModel()) {
+fun Home(navController: NavController, vm: HomeViewModel = hiltViewModel()) {
     val context = LocalContext.current
 
     val items = vm.items.collectAsLazyPagingItems()

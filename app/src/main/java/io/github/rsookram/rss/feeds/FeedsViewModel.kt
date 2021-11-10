@@ -36,8 +36,11 @@ class FeedsViewModel @Inject constructor(
     }
 }
 
+/**
+ * The stateful version of [Feeds]
+ */
 @Composable
-fun FeedsScreen(navController: NavController, vm: FeedsViewModel = hiltViewModel()) {
+fun Feeds(navController: NavController, vm: FeedsViewModel = hiltViewModel()) {
     val feeds = vm.feeds.collectAsState(emptyList())
 
     Feeds(
