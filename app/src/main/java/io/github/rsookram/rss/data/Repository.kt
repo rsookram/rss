@@ -57,7 +57,7 @@ class Repository @Inject constructor(
 
     suspend fun sync(): Boolean {
         val feeds = withContext(ioDispatcher) {
-            database.feedQueries.feed().executeAsList()
+            database.feedQueries.feedToSync().executeAsList()
         }
 
         val rssFeeds = coroutineScope {

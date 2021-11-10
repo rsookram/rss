@@ -10,7 +10,15 @@ getLastCreatedId:
 SELECT last_insert_rowid();
 
 feed:
-SELECT id, url, name FROM Feed ORDER BY url;
+SELECT
+    id,
+    url,
+    COALESCE(NULLIF(name, ''), url) AS name
+FROM Feed
+ORDER BY url;
+
+feedToSync:
+SELECT id, url FROM Feed;
 
 insert:
 INSERT INTO Feed(url, name) VALUES (?, ?);
