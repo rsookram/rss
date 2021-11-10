@@ -16,8 +16,8 @@ item:
 SELECT
     Item.id,
     Item.url,
-    title,
-    Feed.name AS feedName
+    Item.title,
+    COALESCE(NULLIF(Feed.name, ''), Feed.url) AS feedName
 FROM Item JOIN Feed ON Item.feedId = Feed.id
 ORDER BY Item.timestamp DESC
 LIMIT :limit OFFSET :offset;
