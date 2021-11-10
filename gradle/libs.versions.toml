@@ -1,5 +1,5 @@
 [versions]
-accompanist = "0.20.0"
+accompanist = "0.20.2"
 androidxHilt = "1.0.0"
 compose = "1.0.5"
 coroutines = "1.5.2"
