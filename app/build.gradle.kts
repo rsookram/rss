@@ -23,7 +23,6 @@ android {
     }
 
     lint {
-        // TODO: Run Lint on CI
         isCheckReleaseBuilds = false
 
         textReport = true
