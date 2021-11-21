@@ -23,7 +23,9 @@ class FeedsViewModel @Inject constructor(
 
     fun onAddFeed(url: String) {
         appScope.launch {
-            if (!repository.addFeed(url)) {
+            if (repository.addFeed(url)) {
+                // TODO: Show message on success
+            } else {
                 // TODO: Show error if feed loading fails
             }
         }

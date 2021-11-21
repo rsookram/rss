@@ -15,6 +15,7 @@ class SyncWorker @AssistedInject constructor(
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
+        // TODO: Use return value of this
         repository.sync()
         return Result.success()
     }
