@@ -42,7 +42,7 @@ kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version 
 
 retrofit = { module = "com.squareup.retrofit2:retrofit", version = "2.9.0" }
 
-robolectric = { module = "org.robolectric:robolectric", version = "4.6.1" }
+robolectric = { module = "org.robolectric:robolectric", version = "4.7.2" }
 
 sqldelight-gradle = { module = "com.squareup.sqldelight:gradle-plugin", version.ref = "sqldelight" }
 sqldelight-android = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
