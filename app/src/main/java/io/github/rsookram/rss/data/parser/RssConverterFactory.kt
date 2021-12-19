@@ -28,7 +28,6 @@ class RssConverterFactory : Converter.Factory() {
 private class RssResponseBodyConverter : Converter<ResponseBody, RssFeed> {
 
     override fun convert(value: ResponseBody): RssFeed? {
-        // TODO: Consider switching to a SAX parser
         val documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 
         val document = documentBuilder.parse(value.byteStream())
