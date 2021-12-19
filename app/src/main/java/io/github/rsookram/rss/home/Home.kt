@@ -3,7 +3,10 @@ package io.github.rsookram.rss.home
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -22,8 +25,6 @@ import io.github.rsookram.rss.ui.OverflowMenu
 
 @Composable
 fun Home(
-    isRefreshing: Boolean,
-    onRefresh: () -> Unit,
     onManageFeedsClick: () -> Unit,
     items: LazyPagingItems<Item>,
     onItemClick: (Item) -> Unit,
@@ -46,15 +47,6 @@ fun Home(
                                 onManageFeedsClick()
                             }
                         ) { Text(stringResource(R.string.manage_feeds)) }
-
-                        if (!isRefreshing) {
-                            DropdownMenuItem(
-                                onClick = {
-                                    expanded.value = false
-                                    onRefresh()
-                                }
-                            ) { Text(stringResource(R.string.force_refresh)) }
-                        }
                     }
                 }
             )
@@ -82,10 +74,6 @@ fun Home(
                         )
                     }
                 }
-            }
-
-            if (isRefreshing) {
-                CircularProgressIndicator()
             }
         }
     }
