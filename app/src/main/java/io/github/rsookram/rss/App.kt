@@ -46,7 +46,7 @@ class App : Application(), Configuration.Provider {
             .enqueueUniquePeriodicWork(
                 "sync",
                 ExistingPeriodicWorkPolicy.KEEP,
-                PeriodicWorkRequestBuilder<SyncWorker>(Duration.ofHours(12))
+                PeriodicWorkRequestBuilder<SyncWorker>(Duration.ofDays(1))
                     .setConstraints(
                         Constraints.Builder().setRequiredNetworkType(NetworkType.UNMETERED).build()
                     )
