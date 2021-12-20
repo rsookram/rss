@@ -12,6 +12,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import io.github.rsookram.rss.data.PruneWorker
 import io.github.rsookram.rss.data.Repository
 import io.github.rsookram.rss.data.RssService
 import io.github.rsookram.rss.data.SyncWorker
@@ -56,7 +57,7 @@ class App : Application(), Configuration.Provider {
             .enqueueUniquePeriodicWork(
                 "prune",
                 ExistingPeriodicWorkPolicy.KEEP,
-                PeriodicWorkRequestBuilder<SyncWorker>(Duration.ofDays(7))
+                PeriodicWorkRequestBuilder<PruneWorker>(Duration.ofDays(7))
                     .setConstraints(
                         Constraints.Builder().setRequiresCharging(true).build()
                     )
