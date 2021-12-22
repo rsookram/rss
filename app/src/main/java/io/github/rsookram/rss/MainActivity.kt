@@ -13,7 +13,7 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.rsookram.rss.ui.theme.RssTheme
+import io.github.rsookram.rss.ui.theme.AppTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            RssTheme {
+            AppTheme {
                 val systemUiController = rememberSystemUiController()
                 val isLight = MaterialTheme.colors.isLight
 
