@@ -16,6 +16,9 @@ import java.time.Clock
 import java.time.Duration
 import javax.inject.Inject
 
+/**
+ * Abstraction over the database and network for working with RSS feeds.
+ */
 class Repository @Inject constructor(
     private val database: Database,
     private val service: RssService,

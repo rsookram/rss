@@ -7,6 +7,9 @@ import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
+/**
+ * WorkManager worker which fetches the latest data for all subscribed RSS feeds.
+ */
 @HiltWorker
 class SyncWorker @AssistedInject constructor(
     @Assisted appContext: Context,

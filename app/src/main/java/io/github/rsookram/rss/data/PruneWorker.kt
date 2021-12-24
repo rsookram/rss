@@ -7,6 +7,9 @@ import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
+/**
+ * WorkManager worker which removes old entries from the database.
+ */
 @HiltWorker
 class PruneWorker @AssistedInject constructor(
     @Assisted appContext: Context,

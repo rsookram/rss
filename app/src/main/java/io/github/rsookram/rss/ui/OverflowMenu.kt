@@ -11,6 +11,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.stringResource
 import io.github.rsookram.rss.R
 
+/**
+ * Composable which displays an overflow menu item. For use within an AppBar.
+ *
+ * @param content options to show when the menu is expanded
+ */
 @Composable
 fun OverflowMenu(expanded: MutableState<Boolean>, content: @Composable () -> Unit) {
     Box {

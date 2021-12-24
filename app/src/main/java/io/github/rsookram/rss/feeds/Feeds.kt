@@ -27,6 +27,10 @@ import com.google.accompanist.insets.ui.TopAppBar
 import io.github.rsookram.rss.Feed
 import io.github.rsookram.rss.R
 
+/**
+ * Screen used to manage RSS feed subscriptions. Displays all feeds that have been subscribed to
+ * with options to subscribe to more or unsubscribe from existing ones.
+ */
 @Composable
 fun Feeds(
     feeds: List<Feed>,

@@ -11,6 +11,9 @@ import java.time.Instant
 import java.time.format.DateTimeFormatter
 import javax.xml.parsers.DocumentBuilderFactory
 
+/**
+ * [Converter.Factory] to allow Retrofit interfaces to return [RssFeed]s.
+ */
 class RssConverterFactory : Converter.Factory() {
 
     override fun responseBodyConverter(
@@ -78,6 +81,12 @@ private fun parseItem(node: Node, dateTimeFormatter: DateTimeFormatter): RssItem
     return RssItem(url, title, instant)
 }
 
+/**
+ * The data for a single RSS feed.
+ */
 data class RssFeed(val name: String, val items: List<RssItem>)
 
+/**
+ * A single entry within an RSS feed.
+ */
 data class RssItem(val url: String, val title: String, val timestamp: Instant)

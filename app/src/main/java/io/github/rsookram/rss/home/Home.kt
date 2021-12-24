@@ -23,6 +23,10 @@ import io.github.rsookram.rss.Item
 import io.github.rsookram.rss.R
 import io.github.rsookram.rss.ui.OverflowMenu
 
+/**
+ * The main screen of the app. Displays an aggregated view of all RSS feeds that have been
+ * subscribed to.
+ */
 @Composable
 fun Home(
     onManageFeedsClick: () -> Unit,
