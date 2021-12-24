@@ -30,10 +30,17 @@ import javax.inject.Singleton
 
 private const val DATABASE_NAME = "rss.db"
 
+/**
+ * Qualifier annotation used to identify the [CoroutineScope] which is scoped to the application's
+ * lifetime.
+ */
 @Retention(AnnotationRetention.RUNTIME)
 @Qualifier
 annotation class ApplicationScope
 
+/**
+ * The entry point into the app which sets up jobs managed by [WorkManager].
+ */
 @HiltAndroidApp
 class App : Application(), Configuration.Provider {
 
@@ -71,6 +78,9 @@ class App : Application(), Configuration.Provider {
             .build()
 }
 
+/**
+ * Hilt module which provides singleton-scoped dependencies that can't be provided through @Inject.
+ */
 @InstallIn(SingletonComponent::class)
 @Module
 class AppModule {

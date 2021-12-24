@@ -13,6 +13,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ViewModel for [Feeds]
+ */
 @HiltViewModel
 class FeedsViewModel @Inject constructor(
     private val repository: Repository,

@@ -14,6 +14,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.rsookram.rss.data.Repository
 import javax.inject.Inject
 
+/**
+ * ViewModel for [Home]
+ */
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 

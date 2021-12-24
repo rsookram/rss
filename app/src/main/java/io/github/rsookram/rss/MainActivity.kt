@@ -15,6 +15,9 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.rsookram.rss.ui.theme.AppTheme
 
+/**
+ * The single Activity which displays the UI for the app.
+ */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
