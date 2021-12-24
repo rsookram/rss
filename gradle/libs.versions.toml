@@ -2,7 +2,7 @@
 accompanist = "0.20.3"
 androidxHilt = "1.0.0"
 compose = "1.0.5"
-coroutines = "1.5.2"
+coroutines = "1.6.0"
 hilt = "2.40.5"
 sqldelight = "1.5.3"
 
