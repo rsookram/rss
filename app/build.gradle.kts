@@ -112,16 +112,10 @@ dependencies {
     implementation(libs.sqldelight.android)
     implementation(libs.sqldelight.coroutines)
     implementation(libs.sqldelight.paging)
-    testImplementation(libs.sqldelight.test)
 
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
-
-    testImplementation(libs.junit)
-    testImplementation(libs.compose.junit)
-    testImplementation(libs.robolectric)
-    debugImplementation(libs.compose.testManifest)
 }
