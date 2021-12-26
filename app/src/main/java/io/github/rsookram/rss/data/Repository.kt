@@ -12,6 +12,7 @@ import io.github.rsookram.rss.data.parser.RssFeed
 import io.github.rsookram.rss.data.parser.RssItem
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
+import okhttp3.HttpUrl
 import java.time.Clock
 import java.time.Duration
 import javax.inject.Inject
@@ -97,7 +98,16 @@ class Repository @Inject constructor(
         val threshold = clock.instant().minus(Duration.ofDays(90))
         val recentItems = items.filter { it.timestamp > threshold }
 
-        return RssFeed(name, recentItems)
+        return RssFeed(name, recentItems.map { it.withAbsoluteUrl(url) })
+    }
+
+    private fun RssItem.withAbsoluteUrl(feedUrl: String): RssItem {
+        return if (url.startsWith("/")) {
+            val httpUrl = HttpUrl.get(feedUrl)
+            copy(url = "${httpUrl.scheme()}://${httpUrl.host()}$url")
+        } else {
+            this
+        }
     }
 
     private fun ItemQueries.insertAll(id: Long, items: List<RssItem>) {
